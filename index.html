@@ -3,28 +3,75 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- include A-Frame obviously -->
+    <!-- Lates A-frame as of 02/11/20 -->
     <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
-    <!-- include ar.js for A-Frame -->
+    <!-- AR.js library for incorporating webcam -->
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <!-- Text Geomety from: https://www.npmjs.com/package/aframe-text-geometry-component -->
+    <script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script>
+    <!-- JS components need to load b4 the DOM -->
+    <script src="./main.js"></script>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
     <a-scene
+      log="Hello Scene!"
       embedded
-      arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
+      arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
     >
-      <!-- <a-box color="red" position="0 0.5 0" rotation="0 45 45"></a-box> -->
+      <a-sound
+        src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav"
+        autoplay="true"
+        position="-3 1 -4"
+      >
+      </a-sound>
       <!-- <a-entity
         gltf-model="./assets/magnemite/scene.gltf"
-        scale="0.01 0.01 0.01"
+        scale="0.15 0.15 0.15"
       /> -->
-      <a-text
-        scale="1.5 1.5 1.5"
-        rotation="0 90 270"
-        value="Hello, World!"
-      ></a-text>
-      <a-marker-camera preset="hiro"></a-marker-camera>
+      <!-- <a-box
+        id="bright-cube"
+        log="I am a box!"
+        position="0 2 -6"
+        rotation="0 45 45"
+        scale="1 1 1"
+        color="#4CC3D9"
+        animation="property: object3D.position.y; to: 2.2; dir: alternate; dur: 2000; loop: true"
+        scale-on-mouseenter
+        scale-on-mouseleave
+        shadow
+      >
+      </a-box> -->
+      <a-entity camera look-controls>
+        <a-entity
+          cursor="fuseTimeout: 500"
+          position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: black; shader: flat"
+        >
+        </a-entity>
+      </a-entity>
+      <a-ring
+        cursor-listener
+        position="0 1 -3"
+        color="teal"
+        radius-inner="0.5"
+        radius-outer="0.6"
+        sacle="3 1.5 1"
+      >
+        <a-entity
+          position="-0.35 0 0"
+          scale="0.25 0.25 0.25"
+          text-geometry="value: What's up"
+        ></a-entity>
+      </a-ring>
+      <!-- <a-cursor></a-cursor> -->
+      <!-- <a-marker-camera preset="hiro">
+        <a-box color="blue" position="0 0.5 0" rotation="0 45 45"></a-box>
+      </a-marker-camera>
+      <a-marker type="barcode" value="11">
+        <a-box color="blue" position="0 0.5 0" rotation="0 45 45"></a-box>
+      </a-marker> -->
     </a-scene>
   </body>
 </html>
