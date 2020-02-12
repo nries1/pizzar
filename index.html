@@ -15,43 +15,10 @@
 
   <body style="margin: 0; overflow: hidden;">
     <a-scene
-      log="Hello Scene!"
       embedded
       arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
     >
-      <a-sound
-        src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav"
-        autoplay="true"
-        position="-3 1 -4"
-      >
-      </a-sound>
-      <!-- <a-entity
-        gltf-model="./assets/magnemite/scene.gltf"
-        scale="0.15 0.15 0.15"
-      /> -->
-      <!-- <a-box
-        id="bright-cube"
-        log="I am a box!"
-        position="0 2 -6"
-        rotation="0 45 45"
-        scale="1 1 1"
-        color="#4CC3D9"
-        animation="property: object3D.position.y; to: 2.2; dir: alternate; dur: 2000; loop: true"
-        scale-on-mouseenter
-        scale-on-mouseleave
-        shadow
-      >
-      </a-box> -->
-      <a-entity camera look-controls>
-        <a-entity
-          cursor="fuseTimeout: 500"
-          position="0 0 -1"
-          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-          material="color: black; shader: flat"
-        >
-        </a-entity>
-      </a-entity>
-      <a-ring
+      <!-- <a-ring
         cursor-listener
         position="0 1 -3"
         color="teal"
@@ -63,15 +30,20 @@
           position="-0.35 0 0"
           scale="0.25 0.25 0.25"
           text-geometry="value: What's up"
-        ></a-entity>
+        ></a-entity> -->
       </a-ring>
-      <!-- <a-cursor></a-cursor> -->
-      <!-- <a-marker-camera preset="hiro">
+      <a-marker-camera preset="hiro">
         <a-box color="blue" position="0 0.5 0" rotation="0 45 45"></a-box>
       </a-marker-camera>
       <a-marker type="barcode" value="11">
         <a-box color="blue" position="0 0.5 0" rotation="0 45 45"></a-box>
-      </a-marker> -->
+      </a-marker>
+      <a-marker type="barcode" value="12">
+        <a-box color="blue" position="0 0.5 0" rotation="0 45 45"></a-box>
+      </a-marker>
+      <a-marker type="barcode" value="13">
+        <a-box color="blue" position="0 0.5 0" rotation="0 45 45"></a-box>
+      </a-marker>
     </a-scene>
   </body>
 </html>
