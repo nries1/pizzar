@@ -77,6 +77,7 @@ const createMarker = restaurant => {
 const createMenuImage = restaurant => {
   let menu = document.createElement('a-image');
   menu.setAttribute('src', restaurant.imageUrl);
+  menu.setAttribute('rotation', { x: 45, y: 90, z: 0 });
   menu.setAttribute('position', { x: 0, y: 1, z: -3 });
   return menu;
 };
@@ -102,11 +103,11 @@ AFRAME.registerComponent('add-content', {
     restaurantId: { type: 'number', default: null }
   },
   init: function() {
-    const content = createContent(
+    const menu = createMenuImage(
       restuarants.filter(r => r.id === this.data)[0]
     );
-    console.log('Attempting to append ', content, ' to ', this.el);
-    this.el.appendChild(content);
+    console.log('Attempting to append ', menu, ' to ', this.el);
+    this.el.appendChild(menu);
   }
 });
 
