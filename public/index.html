@@ -17,26 +17,42 @@
   </head>
 
   <body style="margin: 0; overflow: hidden;">
-    <a-scene
+    <!-- <a-scene
       embedded
       populate
       arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
+    > -->
+    <a-scene
+      embedded
+      populate
+      arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
     >
       <a-ring
         cursor-listener
-        position="-1.2 1 -3"
+        position="-1.2 1.75 -3"
         color="teal"
         radius-inner="0.3"
         radius-outer="0.35"
         sacle="2 1.5 0.5"
         animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
       >
-        >
         <a-entity
           position="-0.25 0 0"
           scale="0.25 0.25 0.25"
           text-geometry="value: PizzAR"
         ></a-entity>
+        <!-- <a-marker type="pattern" url="https://www.google.com" emitEvents="true">
+          <a-box
+            id="bright-cube"
+            position="0 1 -3"
+            rotation="0 45 45"
+            scale="1 1 1"
+            color="#4CC3D9"
+            animation="property: object3D.position.y; to: 2.2; dir: alternate; dur: 2000; loop: true"
+            shadow
+          >
+          </a-box> -->
+        </a-marker>
       </a-ring>
     </a-scene>
   </body>

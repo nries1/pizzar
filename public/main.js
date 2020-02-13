@@ -14,7 +14,9 @@ const restuarants = [
     ],
     barcodeId: 11,
     imageUrl:
-      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg'
+      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg',
+    url: 'https://www.google.com/',
+    yelpId: 'WavvLdfdP6g8aZTtbBQHTw'
   },
   {
     name: `Big Nick's`,
@@ -31,7 +33,9 @@ const restuarants = [
     ],
     barcodeId: 12,
     imageUrl:
-      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg'
+      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg',
+    url: 'https://www.google.com/',
+    yelpId: 'WavvLdfdP6g8aZTtbBQHTw'
   },
   {
     name: `Uncle Luigi's`,
@@ -48,7 +52,9 @@ const restuarants = [
     ],
     barcodeId: 13,
     imageUrl:
-      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg'
+      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg',
+    url: 'https://www.google.com/',
+    yelpId: 'WavvLdfdP6g8aZTtbBQHTw'
   }
 ];
 
@@ -71,15 +77,25 @@ const createMarker = restaurant => {
   marker.setAttribute('value', restaurant.barcodeId);
   marker.setAttribute('log', 'Marker Created!');
   marker.setAttribute('add-content', restaurant.id);
+  marker.setAttribute('smooth', 'true');
   return marker;
 };
 
 const createMenuImage = restaurant => {
   let menu = document.createElement('a-image');
   menu.setAttribute('src', restaurant.imageUrl);
-  menu.setAttribute('rotation', { x: 45, y: 90, z: 0 });
-  menu.setAttribute('position', { x: 0, y: 1, z: -3 });
+  menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
+  menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
   return menu;
+};
+
+const createLink = restuarant => {
+  let link = document.createElement('a-link');
+  link.setAttribute('href', restuarant.url);
+  link.setAttribute('position', { x: 0, y: 0, z: -0.5 });
+  link.setAttribute('rotation', { x: -90, y: 0, z: 0 });
+  link.setAttribute('scale', { x: 0.25, y: 0.25, z: 0.25 });
+  return link;
 };
 
 const createContent = restaurant => {
@@ -88,6 +104,20 @@ const createContent = restaurant => {
   content.setAttribute('position', { x: 0, y: 0.5, z: 0 });
   content.setAttribute('rotation', { x: 0, y: 45, z: 45 });
   return content;
+};
+
+const createYelpReviewItem = yelpData => {
+  const el = document.createElement('a-text');
+  el.setAttribute('value', yelpData.rating);
+  el.setAttribute('scale', { x: 1.5, y: 1.5, z: 1.5 });
+  el.setAttribute('position', { x: 0, y: 0, z: 0 });
+  return el;
+};
+
+const getYelpData = async restaurant => {
+  const data = window.fetch(`https://api.yelp.com/v3/businesses/${id}`);
+  console.log('DATA FROM YELP = ', data);
+  return data;
 };
 
 AFRAME.registerComponent('log', {
@@ -103,11 +133,18 @@ AFRAME.registerComponent('add-content', {
     restaurantId: { type: 'number', default: null }
   },
   init: function() {
-    const menu = createMenuImage(
-      restuarants.filter(r => r.id === this.data)[0]
-    );
-    console.log('Attempting to append ', menu, ' to ', this.el);
+    const restaurant = restuarants.filter(r => r.id === this.data)[0];
+    const menu = createMenuImage(restaurant);
+    const link = createLink(restaurant);
+    getYelpData(restaurant)
+      .then(data => {
+        this.el.appendChild(createYelpReviewItem(yelpData));
+      })
+      .catch(e => {
+        console.log(e);
+      });
     this.el.appendChild(menu);
+    this.el.appendChild(link);
   }
 });
 
