@@ -21,6 +21,10 @@ app.get('/scene', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../public/scenery.html'));
 });
 
+app.get('/scanner', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../public/scanner.html'));
+});
+
 app.get('/restaurants/', (req, res, next) => {
   res.status(200).send(restaurants);
 });

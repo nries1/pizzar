@@ -13,14 +13,10 @@
     <!-- Include the Environment entities from Aframe-->
     <!-- <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script> -->
     <!-- JS components need to load b4 the DOM -->
-    <script src="./main.js"></script>
+    <script src="./scanner.js"></script>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
-    <!-- <a-scene
-      embedded
-      arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
-    > -->
     <a-scene
       id="scene"
       embedded
@@ -43,8 +39,8 @@
             text-geometry="value: PizzAR"
           ></a-entity>
         </a-ring>
-        <a-entity cursor="fuse: false; fuseTimeout: 500" position="0 0 -1">
-        </a-entity>
+        <!-- <a-entity cursor="fuse: true; fuseTimeout: 500" position="0 0 -1">
+        </a-entity> -->
       </a-entity>
     </a-scene>
   </body>
