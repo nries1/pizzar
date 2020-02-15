@@ -1,64 +1,104 @@
-const restuarants = [
-  {
-    name: `Joe's`,
-    id: 1,
-    menu: [
-      { itemName: 'Cheese Pizza', price: '$2.99' },
-      { itemName: 'Pepperoni Pizza', price: '$3.99' },
-      { itemName: 'Garlic Knots', price: '$1.99' }
-    ],
-    reviews: [
-      { stars: 5, review: 'Great Pizza!' },
-      { stars: 1, review: 'Overrated tourist trap!' },
-      { stars: 2, review: 'So overhyped' }
-    ],
-    barcodeId: 11,
-    imageUrl:
-      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg',
-    url: 'https://www.google.com/',
-    yelpId: 'WavvLdfdP6g8aZTtbBQHTw'
-  },
-  {
-    name: `Big Nick's`,
-    id: 2,
-    menu: [
-      { itemName: 'Cheese Pizza', price: '$2.99' },
-      { itemName: 'Pepperoni Pizza', price: '$3.99' },
-      { itemName: 'Garlic Knots', price: '$1.99' }
-    ],
-    reviews: [
-      { stars: 5, review: 'Great Pizza!' },
-      { stars: 1, review: 'Overrated tourist trap!' },
-      { stars: 2, review: 'So overhyped' }
-    ],
-    barcodeId: 12,
-    imageUrl:
-      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg',
-    url: 'https://www.google.com/',
-    yelpId: 'WavvLdfdP6g8aZTtbBQHTw'
-  },
-  {
-    name: `Uncle Luigi's`,
-    id: 3,
-    menu: [
-      { itemName: 'Spumoni', price: '$4.99' },
-      { itemName: 'Gelato', price: '$5.99' },
-      { itemName: 'Tooty Fruity', price: '$3.99' }
-    ],
-    reviews: [
-      { stars: 5, review: 'Great Pizza!' },
-      { stars: 1, review: 'Overrated tourist trap!' },
-      { stars: 2, review: 'So overhyped' }
-    ],
-    barcodeId: 13,
-    imageUrl:
-      'https://marketplace.canva.com/EADaocwR0b0/1/0/618w/canva-rectangle-patterned-breakfast-menu-nGrl8ktrSjs.jpg',
-    url: 'https://www.google.com/',
-    yelpId: 'WavvLdfdP6g8aZTtbBQHTw'
-  }
-];
-
 const { AFRAME } = window;
+
+window.addEventListener('load', getRestaurants);
+window.addEventListener('load', getMarkers);
+
+function getRestaurants() {
+  window.navigator.geolocation.getCurrentPosition(queryYelp);
+}
+
+function queryYelp(loc) {
+  const {
+    coords: { latitude, longitude }
+  } = loc;
+  window
+    .fetch(`/yelp/search/lat/${latitude}/lng/${longitude}`)
+    .then(data => data.json())
+    .then(data => {
+      window.localStorage.businesses = JSON.stringify(
+        data.jsonBody.businesses.map(_b => ({
+          name: _b.name,
+          distance: _b.distance,
+          latitude: _b.coordinates.latitude,
+          longitude: _b.coordinates.longitude,
+          url: _b.url
+        }))
+      );
+      appendBusinesses({ latitude, longitude });
+    })
+    .catch(e => {
+      console.error(e);
+    });
+}
+
+function renderBusinessesByLocation() {
+  window.navigator.geolocation.watchPosition(appendBusinesses);
+}
+
+function getBusinessPosition(currentPosition, businessPosition) {
+  let z = 0;
+  if (businessPosition.latitude <= currentPosition.latitude) {
+    z = Math.max(Math.floor(businessPosition.distance / 20), 6);
+  } else {
+    z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
+  }
+  if (z > 0 && z < 6) z = 6;
+  let x = 0;
+  if (businessPosition.longitude <= currentPosition.longitude) {
+    x =
+      0 -
+      Math.abs(businessPosition.longitude) -
+      Math.abs(currentPosition.longitude);
+  } else {
+    x =
+      Math.abs(businessPosition.longitude) -
+      Math.abs(currentPosition.longitude);
+  }
+  return { x, y: 1.25, z };
+}
+
+function appendBusinesses(userLocation) {
+  console.log('NEW USER LOCATION READ');
+  const scene = document.querySelector('#scene');
+  const businesses = JSON.parse(window.localStorage.businesses);
+  for (let i = 0; i < 5; i++) {
+    const business = document.createElement('a-link');
+    business.setAttribute('rotation', { x: 0, y: 0, z: 0 });
+    business.setAttribute('href', businesses[i].url);
+    business.setAttribute('scale', { x: 1, y: 1.25, z: 1 });
+    business.setAttribute('title', businesses[i].name);
+    business.setAttribute(
+      'position',
+      getBusinessPosition(userLocation, {
+        latitude: businesses[i].latitude,
+        longitude: businesses[i].longitude,
+        distance: businesses[i].distance
+      })
+    );
+    scene.appendChild(business);
+  }
+  document.querySelector('#loading').setAttribute('visible', 'false');
+}
+
+function appendMarkers(restaurants) {
+  const scene = document.querySelector('#scene');
+  for (let i = 0; i < restaurants.length; i++) {
+    const marker = createMarker(restaurants[i]);
+    scene.appendChild(marker);
+  }
+}
+
+function getMarkers() {
+  window
+    .fetch(`/restaurants`)
+    .then(restaurants => restaurants.json())
+    .then(restaurants => {
+      appendMarkers(restaurants);
+    })
+    .catch(e => {
+      console.log('ERROR Getting Restaurants ', e);
+    });
+}
 
 AFRAME.registerComponent('populate', {
   init: function() {
@@ -76,8 +116,25 @@ const createMarker = restaurant => {
   marker.setAttribute('type', 'barcode');
   marker.setAttribute('value', restaurant.barcodeId);
   marker.setAttribute('log', 'Marker Created!');
-  marker.setAttribute('add-content', restaurant.id);
   marker.setAttribute('smooth', 'true');
+  marker.setAttribute('emitEvents', 'true');
+  marker.addEventListener('markerFound', function(ev) {
+    console.log('MARKER FOUD WITH EV ', ev);
+    const cameraPos = document
+      .getElementById('scene')
+      .camera.getWorldDirection();
+    const markerPos = marker.getAttribute('position');
+    marker.setAttribute('position', {
+      x: cameraPos.x,
+      y: cameraPos.y,
+      z: markerPos.z
+    });
+  });
+  let menu = document.createElement('a-image');
+  menu.setAttribute('src', restaurant.imageUrl);
+  menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
+  menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
+  marker.appendChild(menu);
   return marker;
 };
 
@@ -114,12 +171,6 @@ const createYelpReviewItem = yelpData => {
   return el;
 };
 
-const getYelpData = async restaurant => {
-  const data = window.fetch(`https://api.yelp.com/v3/businesses/${id}`);
-  console.log('DATA FROM YELP = ', data);
-  return data;
-};
-
 AFRAME.registerComponent('log', {
   schema: { type: 'string' },
   init: function() {
@@ -130,14 +181,13 @@ AFRAME.registerComponent('log', {
 
 AFRAME.registerComponent('add-content', {
   schema: {
-    restaurantId: { type: 'number', default: null }
+    restaurantId: { type: 'number', default: 0 }
   },
   init: function() {
-    const restaurant = restuarants.filter(r => r.id === this.data)[0];
     const menu = createMenuImage(restaurant);
     const link = createLink(restaurant);
     getYelpData(restaurant)
-      .then(data => {
+      .then(yelpData => {
         this.el.appendChild(createYelpReviewItem(yelpData));
       })
       .catch(e => {

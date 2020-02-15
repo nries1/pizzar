@@ -1,7 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const PORT = process.env.port || 3000;
 const path = require('path');
+const { restaurants } = require('./data/restaurants');
+const yelp = require('yelp-fusion');
 const app = express();
+
 app.use(express.static(path.join(__dirname, '..', '/public')));
 
 app.use('*', (req, res, next) => {
@@ -11,6 +15,29 @@ app.use('*', (req, res, next) => {
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, './index.html'));
+});
+
+app.get('/restaurants/', (req, res, next) => {
+  res.status(200).send(restaurants);
+});
+
+app.get('/yelp/search/lat/:lat/lng/:lng', (req, res, next) => {
+  const API_KEY = process.env.YELP_API_KEY;
+  console.log('yelp api key is ', API_KEY);
+  const yelpClient = yelp.client(API_KEY);
+  yelpClient
+    .search({
+      latitude: req.params.lat,
+      longitude: req.params.lng,
+      radius: 1000,
+      limit: 20,
+      term: 'pizza'
+    })
+    .then(restaurants => res.status(200).send(restaurants))
+    .catch(error => {
+      console.log(error);
+      res.status(400).send({ error });
+    });
 });
 
 app.listen(PORT, () => {
