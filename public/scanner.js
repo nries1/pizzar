@@ -32,16 +32,14 @@ const createMarker = restaurant => {
   let menu = document.createElement('a-image');
   menu.setAttribute('src', restaurant.imageUrl);
   menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
-  menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
+  menu.setAttribute('position', { x: 0, y: -2, z: 0 });
+  menu.setAttribute('scale', { x: 1.25, y: 1.25, z: 1.25 });
   marker.appendChild(menu);
   return marker;
 };
 
 const createMenuImage = restaurant => {
   let menu = document.createElement('a-image');
-  menu.setAttribute('src', restaurant.imageUrl);
-  menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
-  menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
   return menu;
 };
 
