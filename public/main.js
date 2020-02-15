@@ -61,7 +61,7 @@ function appendBusinesses(userLocation) {
   console.log('NEW USER LOCATION READ');
   const scene = document.querySelector('#scene');
   const businesses = JSON.parse(window.localStorage.businesses);
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < businesses.length; i++) {
     const business = document.createElement('a-link');
     business.setAttribute('rotation', { x: 0, y: 0, z: 0 });
     business.setAttribute('href', businesses[i].url);
