@@ -82,10 +82,12 @@ function appendBusinesses(userLocation) {
 }
 
 function appendMarkers(restaurants) {
-  const scene = document.querySelector('#scene');
+  const camera = document.querySelector('#camera');
+  console.log(camera);
   for (let i = 0; i < restaurants.length; i++) {
+    console.log('CAMERA = ', scene.camera);
     const marker = createMarker(restaurants[i]);
-    scene.appendChild(marker);
+    camera.appendChild(marker);
   }
 }
 
@@ -107,7 +109,9 @@ AFRAME.registerComponent('populate', {
     const scene = this.el.sceneEl;
     for (let i = 0; i < restuarants.length; i++) {
       let marker = createMarker(restuarants[i]);
-      scene.appendChild(marker);
+      scene.camera.appendChild(marker);
+      console.log('Appending marker to ', scene.camera);
+      // scene.appendChild(marker);
     }
   }
 });
@@ -124,18 +128,6 @@ const createMarker = restaurant => {
   menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
   menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
   marker.appendChild(menu);
-  marker.addEventListener('markerFound', function(ev) {
-    console.log('MARKER FOUD WITH EV ', ev);
-    const cameraPos = document
-      .getElementById('scene')
-      .camera.getWorldDirection();
-    menu.setAttribute('position', {
-      x: cameraPos.x,
-      y: cameraPos.y,
-      z: cameraPos.z
-    });
-    console.log('SET MENU POS TO ', cameraPos);
-  });
   return marker;
 };
 

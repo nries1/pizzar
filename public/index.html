@@ -26,11 +26,6 @@
       embedded
       arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
     >
-      <!-- <a-sky color="#6EBAA7"></a-sky> -->
-      <!-- <a-entity
-        id="environment"
-        environment="preset: default; dressingAmount: 500"
-      ></a-entity> -->
       <a-ring
         id="loading"
         visible="true"
@@ -47,16 +42,9 @@
           text-geometry="value: PizzAR"
         ></a-entity>
       </a-ring>
-      <!-- <a-entity id="camera" camera look-controls>
-        <a-entity cursor="fuse: false; fuseTimeout: 500" position="0 0 -1">
-        </a-entity>
-      </a-entity> -->
-      <a-cylinder
-        id="ground"
-        src="https://cdn.aframe.io/a-painter/images/floor.jpg"
-        radius="32"
-        height="0.1"
-      ></a-cylinder>
+      <a-entity id="camera" camera look-controls>
+        <a-entity cursor="fuse: false;" position="0 0 -1"></a-entity>
+      </a-entity>
     </a-scene>
   </body>
 </html>

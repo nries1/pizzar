@@ -17,6 +17,10 @@ app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, './index.html'));
 });
 
+app.get('/scene', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../public/scenery.html'));
+});
+
 app.get('/restaurants/', (req, res, next) => {
   res.status(200).send(restaurants);
 });
@@ -40,5 +44,5 @@ app.get('/yelp/search/lat/:lat/lng/:lng', (req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`listening at ${PORT}`);
+  console.log(`listening at PORT: ${PORT}`);
 });
