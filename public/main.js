@@ -21,7 +21,8 @@ function queryYelp(loc) {
           distance: _b.distance,
           latitude: _b.coordinates.latitude,
           longitude: _b.coordinates.longitude,
-          url: _b.url
+          url: _b.url,
+          imageUrl: _b.imageUrl
         }))
       );
       appendBusinesses({ latitude, longitude });
@@ -47,8 +48,8 @@ function getBusinessPosition(currentPosition, businessPosition) {
   if (businessPosition.longitude <= currentPosition.longitude) {
     x =
       0 -
-      Math.abs(businessPosition.longitude) -
-      Math.abs(currentPosition.longitude);
+      (Math.abs(businessPosition.longitude) -
+        Math.abs(currentPosition.longitude));
   } else {
     x =
       Math.abs(businessPosition.longitude) -
@@ -129,6 +130,7 @@ const createMarker = restaurant => {
       y: cameraPos.y,
       z: markerPos.z
     });
+    console.log('SET MARKER POS TO ', cameraPos);
   });
   let menu = document.createElement('a-image');
   menu.setAttribute('src', restaurant.imageUrl);

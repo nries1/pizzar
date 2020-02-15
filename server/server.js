@@ -23,7 +23,6 @@ app.get('/restaurants/', (req, res, next) => {
 
 app.get('/yelp/search/lat/:lat/lng/:lng', (req, res, next) => {
   const API_KEY = process.env.YELP_API_KEY;
-  console.log('yelp api key is ', API_KEY);
   const yelpClient = yelp.client(API_KEY);
   yelpClient
     .search({
