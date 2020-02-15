@@ -47,10 +47,16 @@
           text-geometry="value: PizzAR"
         ></a-entity>
       </a-ring>
-      <a-entity id="camera" camera look-controls>
+      <!-- <a-entity id="camera" camera look-controls>
         <a-entity cursor="fuse: false; fuseTimeout: 500" position="0 0 -1">
         </a-entity>
-      </a-entity>
+      </a-entity> -->
+      <a-cylinder
+        id="ground"
+        src="https://cdn.aframe.io/a-painter/images/floor.jpg"
+        radius="32"
+        height="0.1"
+      ></a-cylinder>
     </a-scene>
   </body>
 </html>

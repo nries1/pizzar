@@ -119,24 +119,23 @@ const createMarker = restaurant => {
   marker.setAttribute('log', 'Marker Created!');
   marker.setAttribute('smooth', 'true');
   marker.setAttribute('emitEvents', 'true');
-  marker.addEventListener('markerFound', function(ev) {
-    console.log('MARKER FOUD WITH EV ', ev);
-    const cameraPos = document
-      .getElementById('scene')
-      .camera.getWorldDirection();
-    const markerPos = marker.getAttribute('position');
-    marker.setAttribute('position', {
-      x: cameraPos.x,
-      y: cameraPos.y,
-      z: markerPos.z
-    });
-    console.log('SET MARKER POS TO ', cameraPos);
-  });
   let menu = document.createElement('a-image');
   menu.setAttribute('src', restaurant.imageUrl);
   menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
   menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
   marker.appendChild(menu);
+  marker.addEventListener('markerFound', function(ev) {
+    console.log('MARKER FOUD WITH EV ', ev);
+    const cameraPos = document
+      .getElementById('scene')
+      .camera.getWorldDirection();
+    menu.setAttribute('position', {
+      x: cameraPos.x,
+      y: cameraPos.y,
+      z: cameraPos.z
+    });
+    console.log('SET MENU POS TO ', cameraPos);
+  });
   return marker;
 };
 
