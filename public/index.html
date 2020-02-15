@@ -7,26 +7,41 @@
     <!-- Lates A-frame as of 02/11/20 -->
     <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
     <!-- AR.js library for incorporating webcam -->
-    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <!-- <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script> -->
     <!-- Text Geomety from: https://www.npmjs.com/package/aframe-text-geometry-component -->
     <script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script>
-    <!-- Include the Environment entities from Aframe-->
-    <!-- <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script> -->
+    <!--Include the Environment entities from Aframe-->
+    <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
     <!-- JS components need to load b4 the DOM -->
     <script src="./main.js"></script>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
-    <!-- <a-scene
-      embedded
-      arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
-    > -->
-    <a-scene
-      id="scene"
-      embedded
-      arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-    >
-      <a-entity id="camera" camera look-controls>
+    <a-scene id="scene">
+      <a-assets>
+        <img
+          id="groundTexture"
+          src="https://cdn.aframe.io/a-painter/images/floor.jpg"
+        />
+        <img
+          id="skyTexture"
+          src="https://cdn.aframe.io/a-painter/images/sky.jpg"
+        />
+      </a-assets>
+      <a-cylinder
+        id="ground"
+        src="#groundTexture"
+        radius="30"
+        height="0.1"
+      ></a-cylinder>
+
+      <a-sky
+        id="background"
+        src="#skyTexture"
+        theta-length="90"
+        radius="30"
+      ></a-sky>
+      <a-camera id="camera">
         <a-ring
           id="loading"
           visible="true"
@@ -45,7 +60,11 @@
         </a-ring>
         <a-entity cursor="fuse: false; fuseTimeout: 500" position="0 0 -1">
         </a-entity>
-      </a-entity>
+      </a-camera>
+      <!-- <a-entity id="camera" camera look-controls>
+        
+       
+      </a-entity> -->
     </a-scene>
   </body>
 </html>

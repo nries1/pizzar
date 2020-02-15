@@ -1,7 +1,6 @@
 const { AFRAME } = window;
 
 window.addEventListener('load', getRestaurants);
-// window.addEventListener('load', getMarkers);
 
 function getRestaurants() {
   window.navigator.geolocation.getCurrentPosition(queryYelp);
@@ -81,62 +80,6 @@ function appendBusinesses(userLocation) {
   document.querySelector('#loading').setAttribute('visible', 'false');
 }
 
-function appendMarkers(restaurants) {
-  const camera = document.querySelector('#camera');
-  for (let i = 0; i < restaurants.length; i++) {
-    const marker = createMarker(restaurants[i]);
-    camera.appendChild(marker);
-  }
-}
-
-function getMarkers() {
-  window
-    .fetch(`/restaurants`)
-    .then(restaurants => restaurants.json())
-    .then(restaurants => {
-      appendMarkers(restaurants);
-    })
-    .catch(e => {
-      console.log('ERROR Getting Restaurants ', e);
-    });
-}
-
-AFRAME.registerComponent('populate', {
-  init: function() {
-    // get the scene element, which will be the parent for all others
-    const scene = this.el.sceneEl;
-    for (let i = 0; i < restuarants.length; i++) {
-      let marker = createMarker(restuarants[i]);
-      scene.camera.appendChild(marker);
-      console.log('Appending marker to ', scene.camera);
-      // scene.appendChild(marker);
-    }
-  }
-});
-
-const createMarker = restaurant => {
-  let marker = document.createElement('a-marker');
-  marker.setAttribute('type', 'barcode');
-  marker.setAttribute('value', restaurant.barcodeId);
-  marker.setAttribute('log', 'Marker Created!');
-  marker.setAttribute('smooth', 'true');
-  marker.setAttribute('emitEvents', 'true');
-  let menu = document.createElement('a-image');
-  menu.setAttribute('src', restaurant.imageUrl);
-  menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
-  menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
-  marker.appendChild(menu);
-  return marker;
-};
-
-const createMenuImage = restaurant => {
-  let menu = document.createElement('a-image');
-  menu.setAttribute('src', restaurant.imageUrl);
-  menu.setAttribute('rotation', { x: -90, y: 0, z: 0 });
-  menu.setAttribute('position', { x: 0, y: 0, z: -1.5 });
-  return menu;
-};
-
 const createLink = restuarant => {
   let link = document.createElement('a-link');
   link.setAttribute('href', restuarant.url);
@@ -145,49 +88,6 @@ const createLink = restuarant => {
   link.setAttribute('scale', { x: 0.25, y: 0.25, z: 0.25 });
   return link;
 };
-
-const createContent = restaurant => {
-  let content = document.createElement('a-box');
-  content.setAttribute('color', 'blue');
-  content.setAttribute('position', { x: 0, y: 0.5, z: 0 });
-  content.setAttribute('rotation', { x: 0, y: 45, z: 45 });
-  return content;
-};
-
-const createYelpReviewItem = yelpData => {
-  const el = document.createElement('a-text');
-  el.setAttribute('value', yelpData.rating);
-  el.setAttribute('scale', { x: 1.5, y: 1.5, z: 1.5 });
-  el.setAttribute('position', { x: 0, y: 0, z: 0 });
-  return el;
-};
-
-AFRAME.registerComponent('log', {
-  schema: { type: 'string' },
-  init: function() {
-    const stringToLog = this.data;
-    console.log(this.el.tagName, ' was initialized with message ', stringToLog);
-  }
-});
-
-AFRAME.registerComponent('add-content', {
-  schema: {
-    restaurantId: { type: 'number', default: 0 }
-  },
-  init: function() {
-    const menu = createMenuImage(restaurant);
-    const link = createLink(restaurant);
-    getYelpData(restaurant)
-      .then(yelpData => {
-        this.el.appendChild(createYelpReviewItem(yelpData));
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    this.el.appendChild(menu);
-    this.el.appendChild(link);
-  }
-});
 
 // AFRAME.registerComponent('scale-on-mouseenter', {
 //   schema: {
