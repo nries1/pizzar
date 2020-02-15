@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 const path = require('path');
 const { restaurants } = require('./data/restaurants');
 const yelp = require('yelp-fusion');
@@ -41,5 +41,5 @@ app.get('/yelp/search/lat/:lat/lng/:lng', (req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`listening at localhost:${PORT}`);
+  console.log(`listening at ${PORT}`);
 });
