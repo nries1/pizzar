@@ -118,7 +118,7 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
       Math.abs(businessPosition.longitude) -
       Math.abs(currentPosition.longitude);
   }
-  return { x, y: 1.25, z };
+  return { x, y: 1.25, z: -10 };
 }
 
 function appendBusinesses(userLocation) {
