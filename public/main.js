@@ -7,14 +7,20 @@ window.addEventListener('load', function() {
   promise
     .then(function(controller) {
       // Store the returned FULLTILT.DeviceOrientation object
-      console.log('CONTROLLER');
-      console.log(controller);
+      document
+        .getElementById('bearing')
+        .setAttribute(
+          'text-geometry',
+          `value: ${controller.getScreenAdjustedQuaternion()}`
+        );
     })
     .catch(function(message) {
-      console.error(message);
       window.alert(
         'Your device does not allow PizzAR to view compass orientation. We cannot guarantee directional accuracy with respect to your current position'
       );
+      document
+        .getElementById('bearing')
+        .setAttribute('text-geometry', 'value: Compass N/A');
       return;
       // Optionally set up fallback controls...
       // initManualControls();
