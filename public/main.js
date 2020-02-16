@@ -150,7 +150,7 @@ function appendBusinesses(userLocation) {
     document
       .getElementById('bearing')
       .setAttribute('text-geometry', `value: ${JSON.stringify(businessPos)}`);
-    business.setAttribute('position', businessPos);
+    business.setAttribute('position', `bp=${businessPos}`);
     scene.appendChild(business);
   }
   document.querySelector('#loading').setAttribute('visible', 'false');
