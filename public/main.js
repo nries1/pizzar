@@ -7,15 +7,16 @@ window.addEventListener('load', function() {
   promise
     .then(function(controller) {
       // Store the returned FULLTILT.DeviceOrientation object
-      const currentOrientation = deviceOrientation.getScreenAdjustedEuler();
-      const compassHeading = 360 - currentOrientation.alpha;
+      // const currentOrientation = deviceOrientation.getScreenAdjustedEuler();
+      // const compassHeading = 360 - currentOrientation.alpha;
       document
         .getElementById('bearing')
-        .setAttribute('text-geometry', `value: ${compassHeading}`);
+        .setAttribute('text-geometry', `value: SUCCESS`);
     })
     .catch(function(message) {
       window.alert(
-        'Your device does not allow PizzAR to view compass orientation. We cannot guarantee directional accuracy with respect to your current position'
+        'Your device does not allow PizzAR to view compass orientation. We cannot guarantee directional accuracy with respect to your current position. ',
+        message
       );
       document
         .getElementById('bearing')
