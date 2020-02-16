@@ -122,6 +122,9 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
 }
 
 function appendBusinesses(userLocation) {
+  document
+    .getElementById('bearing')
+    .setAttribute('text-geometry', `value: ${JSON.stringify(userLocation)}`);
   const scene = document.querySelector('#scene');
   const businesses = JSON.parse(window.localStorage.businesses);
   for (let i = 0; i < businesses.length; i++) {
