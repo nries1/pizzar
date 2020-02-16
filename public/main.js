@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
         .getElementById('bearing')
         .setAttribute(
           'text-geometry',
-          `value: ${controller.getScreenAdjustedQuaternion()}`
+          `value: ${JSON.stringify(controller.getScreenAdjustedQuaternion())}`
         );
     })
     .catch(function(message) {
