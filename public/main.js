@@ -149,8 +149,11 @@ function appendBusinesses(userLocation) {
         });
     document
       .getElementById('bearing')
-      .setAttribute('text-geometry', `value: ${JSON.stringify(businessPos)}`);
-    business.setAttribute('position', `bp=${businessPos}`);
+      .setAttribute(
+        'text-geometry',
+        `value: bp=${JSON.stringify(businessPos)}`
+      );
+    business.setAttribute('position', businessPos);
     scene.appendChild(business);
   }
   document.querySelector('#loading').setAttribute('visible', 'false');
