@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
       const compassHeading = 360 - currentOrientation.alpha;
       document
         .getElementById('bearing')
-        .setAttribute('text-geometry', `value: SUCCESS`);
+        .setAttribute('text-geometry', `value: ${compassHeading}`);
     })
     .catch(function(message) {
       window.alert(
