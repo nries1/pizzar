@@ -53,9 +53,9 @@ function queryYelp(loc) {
     });
 }
 
-function renderBusinessesByLocation() {
-  window.navigator.geolocation.watchPosition(appendBusinesses);
-}
+// function renderBusinessesByLocation() {
+//   window.navigator.geolocation.watchPosition(appendBusinesses);
+// }
 
 function getApproximateBusinessPosition(currentPosition, businessPosition) {
   let z = 0;
@@ -118,7 +118,7 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
       Math.abs(businessPosition.longitude) -
       Math.abs(currentPosition.longitude);
   }
-  return { x, y: 1.25, z: -10 };
+  return { x, y: 1.25, z };
 }
 
 function appendBusinesses(userLocation) {
@@ -147,12 +147,6 @@ function appendBusinesses(userLocation) {
           longitude: businesses[i].longitude,
           distance: businesses[i].distance
         });
-    document
-      .getElementById('bearing')
-      .setAttribute(
-        'text-geometry',
-        `value: bp=${JSON.stringify(businessPos)}`
-      );
     business.setAttribute('position', businessPos);
     scene.appendChild(business);
   }
