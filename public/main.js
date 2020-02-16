@@ -31,6 +31,9 @@ function queryYelp(loc) {
         .then(controller => {
           const currentOrientation = controller.getScreenAdjustedEuler();
           const compassHeading = 360 - currentOrientation.alpha;
+          document
+            .getElementById('bearing')
+            .setAttribute('text-geometry', `value: Compass ${compassHeading}`);
           appendBusinesses({ ...latLong, compassHeading });
         })
         .catch(message => {
