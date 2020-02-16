@@ -9,6 +9,13 @@ window.addEventListener('load', function() {
       // Store the returned FULLTILT.DeviceOrientation object
       const currentOrientation = controller.getScreenAdjustedEuler();
       const compassHeading = 360 - currentOrientation.alpha;
+      controller.listen(function() {
+        const currentOrientation = controller.getScreenAdjustedEuler();
+        const compassHeading = 360 - currentOrientation.alpha;
+        document
+          .getElementById('bearing')
+          .setAttribute('text-geometry', `value: ${compassHeading}`);
+      });
       document
         .getElementById('bearing')
         .setAttribute('text-geometry', `value: ${compassHeading}`);
