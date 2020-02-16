@@ -124,7 +124,10 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
 function appendBusinesses(userLocation) {
   document
     .getElementById('bearing')
-    .setAttribute('text-geometry', `value: ${JSON.stringify(userLocation)}`);
+    .setAttribute(
+      'text-geometry',
+      `value: ch =${JSON.stringify(userLocation.compassHeading)}`
+    );
   const scene = document.querySelector('#scene');
   const businesses = JSON.parse(window.localStorage.businesses);
   for (let i = 0; i < businesses.length; i++) {
@@ -144,6 +147,9 @@ function appendBusinesses(userLocation) {
           longitude: businesses[i].longitude,
           distance: businesses[i].distance
         });
+    document
+      .getElementById('bearing')
+      .setAttribute('text-geometry', `value: ${JSON.stringify(businessPos)}`);
     business.setAttribute('position', businessPos);
     scene.appendChild(business);
   }
