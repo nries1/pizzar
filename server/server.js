@@ -29,10 +29,6 @@ app.get('/restaurants/', (req, res, next) => {
   res.status(200).send(restaurants);
 });
 
-app.get('/ft/', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../public/FTDEMO.html'));
-});
-
 app.get('/yelp/search/lat/:lat/lng/:lng', (req, res, next) => {
   const API_KEY = process.env.YELP_API_KEY;
   const yelpClient = yelp.client(API_KEY);
