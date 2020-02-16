@@ -1,5 +1,25 @@
 const { AFRAME } = window;
 
+window.addEventListener('load', function() {
+  console.log('FULLTILT = ', window.FULLTILT);
+  // Create a new FULLTILT Promise for e.g. *compass*-based deviceorientation data
+  var promise = new FULLTILT.getDeviceOrientation({ type: 'world' });
+  promise
+    .then(function(controller) {
+      // Store the returned FULLTILT.DeviceOrientation object
+      console.log('CONTROLLER');
+      console.log(controller);
+    })
+    .catch(function(message) {
+      console.error(message);
+      window.alert(
+        'Your device does not allow PizzAR to view compass orientation. We cannot guarantee directional accuracy with respect to your current position'
+      );
+      return;
+      // Optionally set up fallback controls...
+      // initManualControls();
+    });
+});
 window.addEventListener('load', getRestaurants);
 
 function getRestaurants() {
