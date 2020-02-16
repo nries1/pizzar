@@ -7,8 +7,8 @@ window.addEventListener('load', function() {
   promise
     .then(function(controller) {
       // Store the returned FULLTILT.DeviceOrientation object
-      // const currentOrientation = deviceOrientation.getScreenAdjustedEuler();
-      // const compassHeading = 360 - currentOrientation.alpha;
+      const currentOrientation = controller.getScreenAdjustedEuler();
+      const compassHeading = 360 - currentOrientation.alpha;
       document
         .getElementById('bearing')
         .setAttribute('text-geometry', `value: SUCCESS`);
