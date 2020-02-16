@@ -1,38 +1,5 @@
 const { AFRAME } = window;
 
-window.addEventListener('load', function() {
-  console.log('FULLTILT = ', window.FULLTILT);
-  // Create a new FULLTILT Promise for e.g. *compass*-based deviceorientation data
-  var promise = new FULLTILT.getDeviceOrientation({ type: 'world' });
-  promise
-    .then(function(controller) {
-      // Store the returned FULLTILT.DeviceOrientation object
-      const currentOrientation = controller.getScreenAdjustedEuler();
-      const compassHeading = 360 - currentOrientation.alpha;
-      controller.listen(function() {
-        const currentOrientation = controller.getScreenAdjustedEuler();
-        const compassHeading = 360 - currentOrientation.alpha;
-        document
-          .getElementById('bearing')
-          .setAttribute('text-geometry', `value: ${compassHeading}`);
-      });
-      document
-        .getElementById('bearing')
-        .setAttribute('text-geometry', `value: ${compassHeading}`);
-    })
-    .catch(function(message) {
-      window.alert(
-        'Your device does not allow PizzAR to view compass orientation. We cannot guarantee directional accuracy with respect to your current position. ',
-        message
-      );
-      document
-        .getElementById('bearing')
-        .setAttribute('text-geometry', 'value: Compass N/A');
-      return;
-      // Optionally set up fallback controls...
-      // initManualControls();
-    });
-});
 window.addEventListener('load', getRestaurants);
 
 function getRestaurants() {
@@ -57,7 +24,26 @@ function queryYelp(loc) {
           imageUrl: _b.imageUrl
         }))
       );
-      appendBusinesses({ latitude, longitude });
+      return { latitude, longitude };
+    })
+    .then(latLong => {
+      new FULLTILT.getDeviceOrientation({ type: 'world' })
+        .then(controller => {
+          const currentOrientation = controller.getScreenAdjustedEuler();
+          const compassHeading = 360 - currentOrientation.alpha;
+          appendBusinesses({ ...latLong, compassHeading });
+        })
+        .catch(message => {
+          appendBusinesses(latLong);
+          window.alert(
+            'Your device does not allow PizzAR to view compass orientation. We cannot guarantee directional accuracy with respect to your current position. ',
+            message
+          );
+          document
+            .getElementById('bearing')
+            .setAttribute('text-geometry', 'value: Compass N/A');
+          return;
+        });
     })
     .catch(e => {
       console.error(e);
@@ -68,7 +54,7 @@ function renderBusinessesByLocation() {
   window.navigator.geolocation.watchPosition(appendBusinesses);
 }
 
-function getBusinessPosition(currentPosition, businessPosition) {
+function getApproximateBusinessPosition(currentPosition, businessPosition) {
   let z = 0;
   if (businessPosition.latitude <= currentPosition.latitude) {
     z = Math.max(Math.floor(businessPosition.distance / 20), 6);
@@ -90,8 +76,49 @@ function getBusinessPosition(currentPosition, businessPosition) {
   return { x, y: 1.25, z };
 }
 
+function getExactBusinessPosition(currentPosition, businessPosition) {
+  let z = 0;
+  //The business is south of the user
+  if (businessPosition.latitude <= currentPosition.latitude) {
+    //the user is facing south
+    if (
+      currentPosition.compassHeading < 270 &&
+      currentPosition.compassHeading > 90
+    ) {
+      //render the business in front of the user
+      z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
+    } else {
+      //render the business behind the user
+      z = Math.max(Math.floor(businessPosition.distance / 20), 6);
+    }
+  } // the business is north of the user
+  else {
+    //the user is facing north
+    if (
+      currentPosition.compassHeading > 270 &&
+      currentPosition.compassHeading < 90
+    ) {
+      //rend the business in fron of the user
+      z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
+    } else {
+      z = Math.max(Math.floor(businessPosition.distance / 20), 6);
+    }
+  }
+  let x = 0;
+  if (businessPosition.longitude <= currentPosition.longitude) {
+    x =
+      0 -
+      (Math.abs(businessPosition.longitude) -
+        Math.abs(currentPosition.longitude));
+  } else {
+    x =
+      Math.abs(businessPosition.longitude) -
+      Math.abs(currentPosition.longitude);
+  }
+  return { x, y: 1.25, z };
+}
+
 function appendBusinesses(userLocation) {
-  console.log('NEW USER LOCATION READ');
   const scene = document.querySelector('#scene');
   const businesses = JSON.parse(window.localStorage.businesses);
   for (let i = 0; i < businesses.length; i++) {
@@ -100,14 +127,18 @@ function appendBusinesses(userLocation) {
     business.setAttribute('href', businesses[i].url);
     business.setAttribute('scale', { x: 1, y: 1.25, z: 1 });
     business.setAttribute('title', businesses[i].name);
-    business.setAttribute(
-      'position',
-      getBusinessPosition(userLocation, {
-        latitude: businesses[i].latitude,
-        longitude: businesses[i].longitude,
-        distance: businesses[i].distance
-      })
-    );
+    const businessPos = userLocation.compassHeading
+      ? getExactBusinessPosition(userLocation, {
+          latitude: businesses[i].latitude,
+          longitude: businesses[i].longitude,
+          distance: businesses[i].distance
+        })
+      : getApproximateBusinessPosition(userLocation, {
+          latitude: businesses[i].latitude,
+          longitude: businesses[i].longitude,
+          distance: businesses[i].distance
+        });
+    business.setAttribute('position', businessPos);
     scene.appendChild(business);
   }
   document.querySelector('#loading').setAttribute('visible', 'false');
