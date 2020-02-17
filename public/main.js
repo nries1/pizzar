@@ -51,7 +51,7 @@ function queryYelp(loc) {
           document
             .getElementById('bearing')
             .setAttribute('text-geometry', `value: Compass ${compassHeading}`);
-          //appendBusinesses({ ...latLong, compassHeading });
+          appendBusinesses({ ...latLong, compassHeading });
         })
         .catch(message => {
           appendBusinesses(latLong);
@@ -102,7 +102,7 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
     currentPosition,
     businessPosition
   );
-  const { x, z } = MYGEOMETRY.getXandZ(
+  let { x, z } = MYGEOMETRY.getXandZ(
     bearingToBusiness,
     distance,
     currentPosition.compassHeading
