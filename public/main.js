@@ -4,6 +4,23 @@ window.addEventListener('load', getRestaurants);
 
 function getRestaurants() {
   window.navigator.geolocation.getCurrentPosition(queryYelp);
+  // window.navigator.geolocation.watchPosition(
+  //   updateDistanceToBusinesses,
+  //   handleGeoLocationError
+  // );
+}
+
+function handleGeoLocationError(err) {
+  console.log("ERROR UPDATING THE USER'S PERMISSION");
+  console.log(err);
+}
+
+function updateDistanceToBusinesses(location) {
+  const {
+    coords: { latitude, longitude }
+  } = location;
+  const businesses = document.querySelectorAll('a-link');
+  for (let i = 0; i < businesses.length; i++) {}
 }
 
 function queryYelp(loc) {
@@ -53,10 +70,6 @@ function queryYelp(loc) {
     });
 }
 
-// function renderBusinessesByLocation() {
-//   window.navigator.geolocation.watchPosition(appendBusinesses);
-// }
-
 function getApproximateBusinessPosition(currentPosition, businessPosition) {
   let z = 0;
   if (businessPosition.latitude <= currentPosition.latitude) {
@@ -80,44 +93,58 @@ function getApproximateBusinessPosition(currentPosition, businessPosition) {
 }
 
 function getExactBusinessPosition(currentPosition, businessPosition) {
-  let z = 0;
-  //The business is south of the user
-  if (businessPosition.latitude <= currentPosition.latitude) {
-    //the user is facing south
-    if (
-      currentPosition.compassHeading < 270 &&
-      currentPosition.compassHeading > 90
-    ) {
-      //render the business in front of the user
-      z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
-    } else {
-      //render the business behind the user
-      z = Math.max(Math.floor(businessPosition.distance / 20), 6);
-    }
-  } // the business is north of the user
-  else {
-    //the user is facing north
-    if (
-      currentPosition.compassHeading > 270 &&
-      currentPosition.compassHeading < 90
-    ) {
-      //rend the business in fron of the user
-      z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
-    } else {
-      z = Math.max(Math.floor(businessPosition.distance / 20), 6);
-    }
-  }
-  let x = 0;
-  if (businessPosition.longitude <= currentPosition.longitude) {
-    x =
-      0 -
-      (Math.abs(businessPosition.longitude) -
-        Math.abs(currentPosition.longitude));
-  } else {
-    x =
-      Math.abs(businessPosition.longitude) -
-      Math.abs(currentPosition.longitude);
-  }
+  const { MYGEOMETRY } = window;
+  const bearingToBusiness = MYGEOMETRY.getBearing(
+    currentPosition,
+    businessPosition
+  );
+  const distance = MYGEOMETRY.getHaversineDistance(
+    currentPosition,
+    businessPosition
+  );
+  const { x, z } = MYGEOMETRY.getXandZ(
+    bearingToBusiness,
+    distance,
+    currentPosition.compassHeading
+  );
+  // let z = 0;
+  // //The business is south of the user
+  // if (businessPosition.latitude <= currentPosition.latitude) {
+  //   //the user is facing south
+  //   if (
+  //     currentPosition.compassHeading < 270 &&
+  //     currentPosition.compassHeading > 90
+  //   ) {
+  //     //render the business in front of the user
+  //     z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
+  //   } else {
+  //     //render the business behind the user
+  //     z = Math.max(Math.floor(businessPosition.distance / 20), 6);
+  //   }
+  // } // the business is north of the user
+  // else {
+  //   //the user is facing north
+  //   if (
+  //     currentPosition.compassHeading > 270 &&
+  //     currentPosition.compassHeading < 90
+  //   ) {
+  //     //rend the business in fron of the user
+  //     z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
+  //   } else {
+  //     z = Math.max(Math.floor(businessPosition.distance / 20), 6);
+  //   }
+  // }
+  // let x = 0;
+  // if (businessPosition.longitude <= currentPosition.longitude) {
+  //   x =
+  //     0 -
+  //     (Math.abs(businessPosition.longitude) -
+  //       Math.abs(currentPosition.longitude));
+  // } else {
+  //   x =
+  //     Math.abs(businessPosition.longitude) -
+  //     Math.abs(currentPosition.longitude);
+  // }
   return { x, y: 1.25, z };
 }
 
@@ -139,8 +166,7 @@ function appendBusinesses(userLocation) {
     const businessPos = userLocation.compassHeading
       ? getExactBusinessPosition(userLocation, {
           latitude: businesses[i].latitude,
-          longitude: businesses[i].longitude,
-          distance: businesses[i].distance
+          longitude: businesses[i].longitude
         })
       : getApproximateBusinessPosition(userLocation, {
           latitude: businesses[i].latitude,
