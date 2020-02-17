@@ -107,6 +107,11 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
     distance,
     currentPosition.compassHeading
   );
+  if (x > 50) x = 50;
+  if (z > 50) z = 50;
+  if (z < 6) z = 6;
+  if (z < -50) z = -50;
+  if (z < 0 && z > -6) z = -6;
   // let z = 0;
   // //The business is south of the user
   // if (businessPosition.latitude <= currentPosition.latitude) {
