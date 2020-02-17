@@ -119,9 +119,6 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
   if (z < 6) z = 6;
   if (z < -50) z = -50;
   if (z < 0 && z > -6) z = -6;
-  document
-    .getElementById('coordinates')
-    .setAttribute('text-geometry', `value: ch =${JSON.stringify({ x, z })}`);
   return { x, y: 1.25, z };
 }
 
@@ -152,6 +149,11 @@ function appendBusinesses(userLocation) {
         });
     business.setAttribute('position', businessPos);
     scene.appendChild(business);
+    if (businesses[i].name === 'Kingston Pizza') {
+      document
+        .getElementById('coordinates')
+        .setAttribute('text-geometry', `value: ${businessPos}`);
+    }
   }
   document.querySelector('#loading').setAttribute('visible', 'false');
 }
