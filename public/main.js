@@ -1,20 +1,17 @@
 const { AFRAME } = window;
 
 window.addEventListener('load', getRestaurants);
+windiow.addEventListener('devicemotion', function(e) {
+  document
+    .getElementById('bearing')
+    .setAttribute('text-geometry', `value: Device Motion Detected`);
+  document
+    .getElementById('coordinates')
+    .setAttribute('text-geometry', `value: ${JSON.stringify(e.acceleration)}`);
+});
 
 function getRestaurants() {
   window.navigator.geolocation.getCurrentPosition(queryYelp);
-  windiow.addEventListener('devicemotion', function(e) {
-    document
-      .getElementById('bearing')
-      .setAttribute('text-geometry', `value: Device Motion Detected`);
-    document
-      .getElementById('coordinates')
-      .setAttribute(
-        'text-geometry',
-        `value: ${JSON.stringify(e.acceleration)}`
-      );
-  });
 }
 
 function handleGeoLocationError(err) {
