@@ -9,6 +9,7 @@ window.addEventListener('devicemotion', function(e) {
   document
     .getElementById('coordinates')
     .setAttribute('text-geometry', `value: ${JSON.stringify(e.acceleration)}`);
+  positions[0] = curPosition;
 });
 
 function getRestaurants() {
