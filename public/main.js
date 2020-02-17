@@ -152,7 +152,7 @@ function appendBusinesses(userLocation) {
     if (businesses[i].name === 'Kingston Pizza') {
       document
         .getElementById('coordinates')
-        .setAttribute('text-geometry', `value: ${businessPos}`);
+        .setAttribute('text-geometry', `value: ${Json.stringify(businessPos)}`);
     }
   }
   document.querySelector('#loading').setAttribute('visible', 'false');
