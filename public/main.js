@@ -112,44 +112,12 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
   if (z < 6) z = 6;
   if (z < -50) z = -50;
   if (z < 0 && z > -6) z = -6;
-  // let z = 0;
-  // //The business is south of the user
-  // if (businessPosition.latitude <= currentPosition.latitude) {
-  //   //the user is facing south
-  //   if (
-  //     currentPosition.compassHeading < 270 &&
-  //     currentPosition.compassHeading > 90
-  //   ) {
-  //     //render the business in front of the user
-  //     z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
-  //   } else {
-  //     //render the business behind the user
-  //     z = Math.max(Math.floor(businessPosition.distance / 20), 6);
-  //   }
-  // } // the business is north of the user
-  // else {
-  //   //the user is facing north
-  //   if (
-  //     currentPosition.compassHeading > 270 &&
-  //     currentPosition.compassHeading < 90
-  //   ) {
-  //     //rend the business in fron of the user
-  //     z = Math.min(0 - Math.floor(businessPosition.distance / 20), -6);
-  //   } else {
-  //     z = Math.max(Math.floor(businessPosition.distance / 20), 6);
-  //   }
-  // }
-  // let x = 0;
-  // if (businessPosition.longitude <= currentPosition.longitude) {
-  //   x =
-  //     0 -
-  //     (Math.abs(businessPosition.longitude) -
-  //       Math.abs(currentPosition.longitude));
-  // } else {
-  //   x =
-  //     Math.abs(businessPosition.longitude) -
-  //     Math.abs(currentPosition.longitude);
-  // }
+  document
+    .getElementById('bearing')
+    .setAttribute(
+      'text-geometry',
+      `value: Compass ${JSON.stringify({ x, z })}`
+    );
   return { x, y: 1.25, z };
 }
 
