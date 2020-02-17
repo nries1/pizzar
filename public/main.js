@@ -4,10 +4,18 @@ window.addEventListener('load', getRestaurants);
 
 function getRestaurants() {
   window.navigator.geolocation.getCurrentPosition(queryYelp);
-  // window.navigator.geolocation.watchPosition(
-  //   updateDistanceToBusinesses,
-  //   handleGeoLocationError
-  // );
+  window.navigator.geolocation.watchPosition(
+    // updateDistanceToBusinesses,
+    // handleGeoLocationError
+    function(e) {
+      document
+        .getElementById('bearing')
+        .setAttribute('text-geometry', `value: New Location Detected`);
+      document
+        .getElementById('coordinates')
+        .setAttribute('text-geometry', `value: ${JSON.stringify(e.coords)}`);
+    }
+  );
 }
 
 function handleGeoLocationError(err) {
