@@ -61,7 +61,7 @@ function queryYelp(loc) {
           );
           document
             .getElementById('bearing')
-            .setAttribute('text-geometry', 'value: Compass N/A');
+            .setAttribute('text-geometry', `value: ${message}`);
           return;
         });
     })
