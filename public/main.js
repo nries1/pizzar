@@ -107,6 +107,11 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
     distance,
     currentPosition.compassHeading
   );
+  //rescale x and z to be a portion of the max distance the user should see
+  //yelp returns businesses up to 1000 meters from the user and I don't want
+  //businesses to appear more than 50 meters away.
+  x = (x / 1000) * 50;
+  z = (z / 1000) * 50;
   if (x > 50) x = 50;
   if (x < -50) x = -50;
   if (x < 0 && x > -6) x = -6;
@@ -114,6 +119,9 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
   if (z < 6) z = 6;
   if (z < -50) z = -50;
   if (z < 0 && z > -6) z = -6;
+  document
+    .getElementById('coordinates')
+    .setAttribute('text-geometry', `value: ch =${JSON.stringify({ x, z })}`);
   return { x, y: 1.25, z };
 }
 
