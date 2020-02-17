@@ -13,7 +13,7 @@ function getRestaurants() {
         .setAttribute('text-geometry', `value: New Location Detected`);
       document
         .getElementById('coordinates')
-        .setAttribute('text-geometry', `value: ${JSON.stringify(e.coords)}`);
+        .setAttribute('text-geometry', `value: ${JSON.stringify(e)}`);
     }
   );
 }
