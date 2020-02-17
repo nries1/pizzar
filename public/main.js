@@ -1,10 +1,11 @@
 const { AFRAME } = window;
+let positions = [];
 
 window.addEventListener('load', getRestaurants);
 window.addEventListener('devicemotion', function(e) {
-  document
-    .getElementById('bearing')
-    .setAttribute('text-geometry', `value: Device Motion Detected`);
+  let prevPosition = positions[0];
+  const curPosition = Number(e.acceleration.z);
+  if (Math.abs(prevPosition - curPosition) < 10) return;
   document
     .getElementById('coordinates')
     .setAttribute('text-geometry', `value: ${JSON.stringify(e.acceleration)}`);
