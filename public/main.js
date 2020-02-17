@@ -108,16 +108,12 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
     currentPosition.compassHeading
   );
   if (x > 50) x = 50;
+  if (x < -50) x = -50;
+  if (x < 0 && x > -6) x = -6;
   if (z > 50) z = 50;
   if (z < 6) z = 6;
   if (z < -50) z = -50;
   if (z < 0 && z > -6) z = -6;
-  document
-    .getElementById('bearing')
-    .setAttribute(
-      'text-geometry',
-      `value: Compass ${JSON.stringify({ x, z })}`
-    );
   return { x, y: 1.25, z };
 }
 
