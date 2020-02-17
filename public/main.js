@@ -50,7 +50,7 @@ function queryYelp(loc) {
           const compassHeading = 360 - currentOrientation.alpha;
           document
             .getElementById('bearing')
-            .setAttribute('text-geometry', `value: Compass ${compassHeading}`);
+            .setAttribute('text-geometry', `value: Compass: ${compassHeading}`);
           appendBusinesses({ ...latLong, compassHeading });
         })
         .catch(message => {
@@ -123,12 +123,6 @@ function getExactBusinessPosition(currentPosition, businessPosition) {
 }
 
 function appendBusinesses(userLocation) {
-  document
-    .getElementById('bearing')
-    .setAttribute(
-      'text-geometry',
-      `value: ch =${JSON.stringify(userLocation.compassHeading)}`
-    );
   const scene = document.querySelector('#scene');
   const businesses = JSON.parse(window.localStorage.businesses);
   for (let i = 0; i < businesses.length; i++) {
@@ -152,7 +146,7 @@ function appendBusinesses(userLocation) {
     if (businesses[i].name === 'Kingston Pizza') {
       document
         .getElementById('coordinates')
-        .setAttribute('text-geometry', `value: ${Json.stringify(businessPos)}`);
+        .setAttribute('text-geometry', `value: ${JSON.stringify(businessPos)}`);
     }
   }
   document.querySelector('#loading').setAttribute('visible', 'false');
