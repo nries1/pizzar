@@ -1,7 +1,7 @@
 const { AFRAME } = window;
 
 window.addEventListener('load', getRestaurants);
-windiow.addEventListener('devicemotion', function(e) {
+window.addEventListener('devicemotion', function(e) {
   document
     .getElementById('bearing')
     .setAttribute('text-geometry', `value: Device Motion Detected`);
